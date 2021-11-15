@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { Firestore, doc, deleteDoc } from 'firebase/firestore';
 
 export function useDocument(db: Firestore, collection: string) {
-  const [data, setData] = useState();
+  const [data] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
 
