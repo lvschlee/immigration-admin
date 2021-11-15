@@ -21,6 +21,9 @@ export function Table({ items }: any) {
       title: 'Описание',
       dataIndex: 'description',
       key: 'description',
+      render(text: string) {
+        return text.slice(0, 128).concat('...');
+      }
     },
     {
       title: 'Действия',

@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import { App } from './App';
+import { Home, Posts, PostsCreate, Orders } from './pages';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -9,7 +12,17 @@ import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<Home />} />
+          <Route path="posts" element={<Posts />}>
+            <Route path="create" element={<PostsCreate />} />
+          </Route>
+          <Route path="orders" element={<Orders />} />
+        </Route>
+      </Routes>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
