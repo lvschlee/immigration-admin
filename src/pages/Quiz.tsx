@@ -19,7 +19,7 @@ import { Table } from '../components';
 
 import { app, db } from '../firebase';
 
-export function Posts() {
+export function Quiz() {
   const [posts, loading] = useCollectionData(collection(db, 'posts'), {
     idField: 'id',
   });
@@ -64,7 +64,7 @@ export function Posts() {
         <PageHeader
           ghost={false}
           onBack={() => window.history.back()}
-          title="Записи"
+          title="Опросник"
           extra={[
             <Button type="primary" onClick={showModal}>
               Добавить

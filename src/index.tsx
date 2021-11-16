@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { App } from './App';
-import { Home, Posts, PostsCreate, Orders } from './pages';
+import { Home, Posts, Quiz } from './pages';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -16,10 +16,8 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="posts" element={<Posts />}>
-            <Route path="create" element={<PostsCreate />} />
-          </Route>
-          <Route path="orders" element={<Orders />} />
+          <Route path="posts" element={<Posts />} />
+          <Route path="quiz" element={<Quiz />} />
         </Route>
       </Routes>
     </Router>
