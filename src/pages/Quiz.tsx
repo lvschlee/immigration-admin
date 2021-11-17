@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import {
@@ -13,19 +13,28 @@ import {
 import { db } from '../firebase';
 
 export function Quiz() {
-  const [quiz, loading] = useCollectionData(collection(db, 'quiz'), {
+  const [saving, setSaving] = useState(false);
+  const [quiz = [], loading] = useCollectionData<any, any, any>(collection(db, 'quiz'), {
     idField: 'id',
   });
 
   const onFinish = async (values: any) => {
-    await setDoc(doc(db, 'quiz', uuid()), values);
-  };
+    try {
+      setSaving(true);
 
-  console.info(quiz);
+      await setDoc(doc(db, 'quiz', 'main'), values);
+    } catch(e) {
+      console.info(e);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (loading) {
     return <p>loading</p>;
   }
+
+  const { schema } = quiz[0];
 
   return (
     <div>
@@ -40,19 +49,19 @@ export function Quiz() {
         <Form
           name="basic"
           id="myForm"
-          initialValues={{ remember: true }}
+          initialValues={{ remember: true, schema }}
           layout="vertical"
           onFinish={onFinish}
           autoComplete="off"
         >
           <Form.Item
-            name="description"
+            name="schema"
             rules={[{ required: true, message: 'Поле не может быть пустым' }]}
           >
             <Input.TextArea autoSize={{ minRows: 20 }} />
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Сохранить</Button>
+            <Button loading={saving} htmlType="submit" type="primary">Сохранить</Button>
           </Form.Item>
         </Form>
       </div>
