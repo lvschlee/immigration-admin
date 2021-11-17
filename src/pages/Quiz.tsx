@@ -7,7 +7,6 @@ import {
   PageHeader,
   Form,
   Input,
-  message,
 } from 'antd';
 
 
@@ -21,6 +20,8 @@ export function Quiz() {
   const onFinish = async (values: any) => {
     await setDoc(doc(db, 'quiz', uuid()), values);
   };
+
+  console.info(quiz);
 
   if (loading) {
     return <p>loading</p>;
