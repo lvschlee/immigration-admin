@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { ref, getStorage, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes } from 'firebase/storage';
 import {
   Button,
   Divider,
@@ -17,16 +17,23 @@ import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 import { Table } from '../components';
 
-import { app, db } from '../firebase';
+import { db, storage } from '../firebase';
+
+const initialPost = {
+  title: '',
+  description: '',
+  thumb: '',
+};
 
 export function Posts() {
+  const [editItem, setEditItem] = useState<any>(initialPost);
+  const [uploading, setUploading] = useState(false);
+  const [fileStoragePath, setFileStoragePath] = useState<string>();
   const [posts, loading] = useCollectionData(collection(db, 'posts'), {
     idField: 'id',
   });
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const storage = getStorage(app);
 
   const props = {
     name: 'file',
@@ -42,8 +49,22 @@ export function Posts() {
     },
   };
 
+  // Move to use dispatch or context API
+  const isEditMode = !!editItem.title;
+
   const onFinish = async (values: any) => {
-    await setDoc(doc(db, 'posts', uuid()), values);
+    try {
+      await setDoc(doc(db, 'posts', isEditMode ? editItem.id : uuid()), {
+        ...values,
+        thumb: fileStoragePath ? fileStoragePath : editItem.thumb,
+      });
+    } catch (e) {
+      console.info(e);
+    } finally {
+      setEditItem(false);
+      setIsModalVisible(false);
+      setFileStoragePath(undefined);
+    }
   };
 
   const showModal = () => {
@@ -51,7 +72,16 @@ export function Posts() {
   };
 
   const handleCancel = () => {
+    setEditItem(false);
     setIsModalVisible(false);
+    setFileStoragePath(undefined);
+  };
+
+  // It's bad i know :(
+  const handleEdit = (id: string) => {
+    const editPost = posts?.find((post) => post.id === id);
+    setEditItem(editPost);
+    setIsModalVisible(true);
   };
 
   if (loading) {
@@ -74,26 +104,32 @@ export function Posts() {
         />
         <Divider />
 
-        <Table items={posts} />
+        <Table items={posts} onEditClick={handleEdit} />
       </div>
 
-      
       <Modal
-        title="Новая запись"
         centered
-        okText="создать"
         cancelText="отменить"
+        destroyOnClose={true}
+        title={isEditMode ? 'Редактирование записи' : 'Новая запись'}
+        okText={isEditMode ? 'сохранить' : 'создать'}
         visible={isModalVisible}
         onCancel={handleCancel}
+        afterClose={handleCancel}
         okButtonProps={{
           form: 'myForm',
           htmlType: 'submit',
+          disabled: uploading,
         }}
       >
         <Form
           name="basic"
           id="myForm"
-          initialValues={{ remember: true }}
+          initialValues={{
+            remember: true,
+            title: editItem.title,
+            description: editItem.description,
+          }}
           layout="vertical"
           onFinish={onFinish}
           autoComplete="off"
@@ -116,8 +152,19 @@ export function Posts() {
             maxCount={1}
             listType="picture-card"
             customRequest={async (props: any) => {
-              console.info(props);
-              await uploadBytes(ref(storage, `posts/${props.file.name}`), props.file);
+              try {
+                setUploading(true);
+
+                const storageFilePath = 'posts/'.concat(props.file.name);
+                const imgRef = ref(storage, storageFilePath);
+
+                await uploadBytes(imgRef, props.file);
+                setFileStoragePath(storageFilePath);
+              } catch (e) {
+                console.info(e);
+              } finally {
+                setUploading(false);
+              }
             }}
           >
             <UploadOutlined />
