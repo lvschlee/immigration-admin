@@ -5,12 +5,13 @@ import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
 
 import { Menu } from './components';
+import { RootStateProvider } from './RootStateContext';
 
 const { Header, Content, Sider } = Layout;
 
 export function App() {
   return (
-    <>
+    <RootStateProvider>
       <Layout>
         <Sider breakpoint="lg" collapsedWidth="0">
           <div className="logo" />
@@ -26,6 +27,6 @@ export function App() {
           </Content>
         </Layout>
       </Layout>
-    </>
+    </RootStateProvider>
   );
 }

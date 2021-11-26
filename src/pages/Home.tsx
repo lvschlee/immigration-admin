@@ -30,6 +30,33 @@ export function Home() {
       dataIndex: 'email',
     },
     {
+      title: 'Результат опроса',
+      dataIndex: 'answers',
+      key: 'answers',
+      render: (text: string, record: any) => {
+        if (!record?.answers?.length) {
+          return <div>-</div>;
+        }
+
+        return (
+          <ul>
+            {record.answers.map(({ question, answer }: any) => (
+              <li key={question + answer}>
+                <div>
+                  <strong>Вопрос:</strong>
+                  &nbsp;{question}
+                </div>
+                <div>
+                  <strong>Ответ:</strong>
+                  &nbsp;{answer}
+                </div>
+              </li>
+            ))}
+          </ul>
+        );
+      },
+    },
+    {
       title: 'Действия',
       dataIndex: 'actions',
       render: (_text: string, record: any) => (
