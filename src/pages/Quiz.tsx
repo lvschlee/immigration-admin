@@ -43,6 +43,13 @@ export const Quiz = observer(() => {
       key: 'text',
     },
     {
+      title: 'Это основной вопрос',
+      dataIndex: 'isFirst',
+      render(isFirst: boolean) {
+        return isFirst ? 'Да' : 'Нет'
+      }
+    },
+    {
       title: 'Ответы',
       dataIndex: 'answers',
       key: 'answers',
