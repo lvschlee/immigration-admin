@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { App } from './App';
-import { Home, Posts, Quiz } from './pages';
+import { Home, Posts, Quiz, Orders, Devices } from './pages';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -18,6 +18,8 @@ ReactDOM.render(
           <Route index element={<Home />} />
           <Route path="posts" element={<Posts />} />
           <Route path="quiz" element={<Quiz />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="devices" element={<Devices />} />
         </Route>
       </Routes>
     </Router>
