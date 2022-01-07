@@ -5,8 +5,9 @@ import {
   BookOutlined,
   AlertOutlined,
   NotificationOutlined,
+  ShoppingCartOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
-
 
 export function Menu() {
   return (
@@ -19,6 +20,12 @@ export function Menu() {
       </AntMenu.Item>
       <AntMenu.Item key="3" icon={<NotificationOutlined />}>
         <Link to="quiz">Опросник</Link>
+      </AntMenu.Item>
+      <AntMenu.Item key="4" icon={<ShoppingCartOutlined />}>
+        <Link to="orders">Заказы</Link>
+      </AntMenu.Item>
+      <AntMenu.Item key="5" icon={<TeamOutlined />}>
+        <Link to="devices">Пользователи</Link>
       </AntMenu.Item>
     </AntMenu>
   );

@@ -22,6 +22,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_IMMIGRATION_6A56D }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_IMMIGRATION_575DA }}'
           channelId: live
-          projectId: immigration-6a56d
+          projectId: immigration-575da
