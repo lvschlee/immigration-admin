@@ -81,7 +81,7 @@ export const QuestionForm = ({ onFinish }: any) => {
                           Это последний вопрос
                         </Select.Option>
                         {questionsWithoutCurrent.map(({ id, text }) => (
-                          <Select.Option key="id" value={id}>
+                          <Select.Option key={id} value={id}>
                             {text}
                           </Select.Option>
                         ))}

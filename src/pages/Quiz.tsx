@@ -41,6 +41,9 @@ export const Quiz = observer(() => {
       title: 'Вопрос',
       dataIndex: 'text',
       key: 'text',
+      render(text: string) {
+        return <p>{text.length > 70 ? text.slice(0, 70).concat('...') : text}</p>
+      }
     },
     {
       title: 'Это основной вопрос',
@@ -53,11 +56,11 @@ export const Quiz = observer(() => {
       title: 'Ответы',
       dataIndex: 'answers',
       key: 'answers',
-      render(arr: any) {
+      render(arr: any[]) {
         return (
           <ul>
-            {arr.map(({ text, next }: any) => (
-              <li key={text}>
+            {arr.map(({ text, next }: any, index: number) => (
+              <li key={text + index}>
                 {text} -&gt;{' '}
                 {next === 'finish'
                   ? 'Завершение опроса'
